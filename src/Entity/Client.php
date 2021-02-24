@@ -42,7 +42,7 @@ class Client
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $statut;
+    private $statut = 'Actif';
 
     /**
      * @ORM\Column(type="boolean")

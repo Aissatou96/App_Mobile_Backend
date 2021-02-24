@@ -32,10 +32,11 @@ class Compte
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $statut;
+    private $statut = 'Actif';
 
     /**
      * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $createdAt;
 
@@ -53,6 +54,11 @@ class Compte
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="compte")
      */
     private $transactions;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Agence::class, cascade={"persist", "remove"})
+     */
+    private $agence;
 
     public function __construct()
     {
@@ -162,6 +168,18 @@ class Compte
                 $transaction->setCompte(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAgence(): ?Agence
+    {
+        return $this->agence;
+    }
+
+    public function setAgence(?Agence $agence): self
+    {
+        $this->agence = $agence;
 
         return $this;
     }

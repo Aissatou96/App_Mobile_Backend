@@ -32,7 +32,7 @@ class Agence
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $statut;
+    private $statut = 'Actif';
 
     /**
      * @ORM\Column(type="boolean")
@@ -43,11 +43,6 @@ class Agence
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="agence")
      */
     private $users;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Compte::class, cascade={"persist", "remove"})
-     */
-    private $compte;
 
     public function __construct()
     {
@@ -133,18 +128,6 @@ class Agence
                 $user->setAgence(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCompte(): ?Compte
-    {
-        return $this->compte;
-    }
-
-    public function setCompte(?Compte $compte): self
-    {
-        $this->compte = $compte;
 
         return $this;
     }
