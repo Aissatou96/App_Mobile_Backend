@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource()
  */
 class User implements UserInterface
 {
@@ -69,6 +71,11 @@ class User implements UserInterface
      */
     private $comptes;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Username;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
@@ -109,7 +116,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_' . $this->profil->getLibelle();
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -272,6 +279,13 @@ class User implements UserInterface
                 $compte->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setUsername(string $Username): self
+    {
+        $this->Username = $Username;
 
         return $this;
     }

@@ -25,6 +25,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user = new User();
             $user->setFirstname($faker->firstName())
                  ->setLastname($faker->lastName())
+                 ->setUsername($faker->userName())
                  ->setEmail($faker->email())
                  ->setPassword($this->encoder->encodePassword($user, "passer123"))
             ;
