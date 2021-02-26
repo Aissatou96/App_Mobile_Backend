@@ -1,5 +1,4 @@
 <?php
-// src/DataPersister/UserDataPersister.php
 
 namespace App\DataPersisters;
 
@@ -37,11 +36,11 @@ class UserDataPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($data, array $context = [])
     {
-        if ($data->getPassword()) {
-            $data->setPassword($this->_passwordEncoder->encodePassword($data,$data->getPassword()));
+        // if ($data->getPassword()) {
+        //     $data->setPassword($this->_passwordEncoder->encodePassword($data,$data->getPassword()));
 
-            $data->eraseCredentials();
-        }
+        //     $data->eraseCredentials();
+        // }
 
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();

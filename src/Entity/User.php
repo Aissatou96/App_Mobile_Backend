@@ -111,6 +111,11 @@ class User implements UserInterface
      */
     private $comptes;
 
+    /**
+     * @ORM\Column(type="blob")
+     */
+    private $avatar;
+
 
 
     public function __construct()
@@ -316,6 +321,18 @@ class User implements UserInterface
                 $compte->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar($avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

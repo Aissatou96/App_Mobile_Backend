@@ -46,7 +46,10 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                $user->setFirstname($faker->firstName())
                     ->setLastname($faker->lastName())
                     ->setEmail($faker->email())
-                    ->setPassword($this->encoder->encodePassword($user, "passer123"));
+                    ->setPassword($this->encoder->encodePassword($user, "passer123"))
+                    ->setAvatar($faker->imageUrl($width = 640, $height = 480))
+                    ;
+                    
                     $manager->persist($user);
 
                     $this->setReference(self::USER.$j,$user);    
