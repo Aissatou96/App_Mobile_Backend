@@ -7,10 +7,46 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CompteRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ * 
+ *   attributes={},
+ * 
+ *  collectionOperations={
+ *                          "addCompte"={
+ *                                      "method"="POST",
+ *                                      "path"="/compte",
+ *                                      "denormalization_context"= {"groups"= {"compte_write"}}
+ *                                    },
+ * 
+ *                          "getComptes"={
+ *                                      "method"="GET",
+ *                                      "path"="/comptes",
+ *                                      "normalization_context"= {"groups"= {"comptes_read"}}
+ *                                    }
+ *                       },
+ * 
+ *  itemOperations={
+ *                     "getCompte"={
+ *                                  "method"="GET",
+ *                                  "path"="/comptes/{id}",
+ *                                  "normalization_context"= {"groups"= {"one_compte_read"}}
+ *                               },
+ * 
+ *                      "updateCompte"={
+ *                                  "method"="PUT",
+ *                                  "path"="/comptes/{id}"
+ *                               },
+ * 
+ *                      "deleteCompte"={
+ *                                  "method"="DELETE",
+ *                                  "path"="/comptes/{id}"
+ *                               }
+ *                 }
+ * )
  */
 class Compte
 {

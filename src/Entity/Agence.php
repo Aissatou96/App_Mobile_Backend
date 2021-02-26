@@ -7,10 +7,45 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AgenceRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ * 
+ *   attributes={},
+ * 
+ *  collectionOperations={
+ *                          "addAgence"={
+ *                                      "method"="POST",
+ *                                      "path"="/agence"
+ *                                    },
+ * 
+ *                          "getAllAgences"={
+ *                                      "method"="GET",
+ *                                      "path"="/agences",
+ *                                      "normalization_context"= {"groups"= {"agences_read"}}
+ *                                    }
+ *                       },
+ * 
+ *  itemOperations={
+ *                     "getOneAgence"={
+ *                                  "method"="GET",
+ *                                  "path"="/agences/{id}",
+ *                                  "normalization_context"= {"groups"= {"one_agence_read"}}
+ *                               },
+ * 
+ *                      "updateAgence"={
+ *                                  "method"="PUT",
+ *                                  "path"="/agences/{id}"
+ *                               },
+ * 
+ *                      "deleteAgence"={
+ *                                  "method"="DELETE",
+ *                                  "path"="/agences/{id}"
+ *                               }
+ *                 }
+ * )
  */
 class Agence
 {
@@ -23,16 +58,19 @@ class Agence
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agences_read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agences_read"})
      */
     private $adress;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agences_read"})
      */
     private $statut = 'Actif';
 

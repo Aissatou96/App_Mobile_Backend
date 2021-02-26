@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\DataFixtures\ProfilFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -20,26 +21,47 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     
     public function load(ObjectManager $manager)
     {
+        $profils  = ['AdminSystem', 'AdminAgence', 'Caissier', 'UserAgence'];
         $faker = Factory::create('fr_FR');
-        for ($i=0; $i < 5 ; $i++) { 
-            $user = new User();
-            $user->setFirstname($faker->firstName())
-                 ->setLastname($faker->lastName())
-                 ->setUsername($faker->userName())
-                 ->setEmail($faker->email())
-                 ->setPassword($this->encoder->encodePassword($user, "passer123"))
-            ;
-            $manager->persist($user);
-            $this->addReference(self::USER.$i,$user);
+         for ($i=0; $i < count($profils) ; $i++) { 
+             for ($j=0; $j < 3 ; $j++) { 
+               if($profils[$i] == 'AdminSystem'){
+                   $user = new User();
+                   $user->setProfil($this->getReference(ProfilFixtures::ADMINSYS_REF));
+                   $manager->persist($user);
+               }elseif ($profils[$i] == 'AdminAgence') {
+                    $user = new User();
+                    $user->setProfil($this->getReference(ProfilFixtures::ADMINAGENCE_REF));
+                    $manager->persist($user);
+               }elseif ($profils[$i] == 'Caissier') {
+                    $user = new User();
+                    $user->setProfil($this->getReference(ProfilFixtures::CAISSIER_REF));
+                    $manager->persist($user);
+               }elseif ($profils[$i] == 'UserAgence') {
+                    $user = new User();
+                    $user->setProfil($this->getReference(ProfilFixtures::USER_REF));
+                    $manager->persist($user);
+               }
+
+               $user->setFirstname($faker->firstName())
+                    ->setLastname($faker->lastName())
+                    ->setEmail($faker->email())
+                    ->setPassword($this->encoder->encodePassword($user, "passer123"));
+                    $manager->persist($user);
+
+                    $this->setReference(self::USER.$j,$user);    
+             }
+         }
+                    $manager->flush();
         }
 
-        $manager->flush();
-    }
-
-    public function getDependencies()
+        public function getDependencies()
     {
         return [
             ProfilFixtures::class
         ];
     }
-}
+    }
+
+   
+

@@ -20,7 +20,7 @@ class ClientFixtures extends Fixture
                    ->setPhone($faker->phoneNumber)
                    ->setCni($faker->ean13);
             $manager->persist($client);
-            $this->addReference(self::CLIENT.$i,$client);
+            $this->setReference(self::CLIENT.$i,$client);
         }
         $manager->flush();
     }

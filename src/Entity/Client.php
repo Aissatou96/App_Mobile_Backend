@@ -7,9 +7,45 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ * 
+ *   attributes={},
+ * 
+ *  collectionOperations={
+ *                          "addClt"={
+ *                                      "method"="POST",
+ *                                      "path"="/client",
+ *                                      "denormalization_context"= {"groups"= {"client_write"}}
+ *                                    },
+ * 
+ *                          "getAllClts"={
+ *                                      "method"="GET",
+ *                                      "path"="/clients",
+ *                                      "normalization_context"= {"groups"= {"clients_read"}}
+ *                                    }
+ *                       },
+ * 
+ *  itemOperations={
+ *                     "getOneClt"={
+ *                                  "method"="GET",
+ *                                  "path"="/clients/{id}",
+ *                                  "normalization_context"= {"groups"= {"one_client_read"}}
+ *                               },
+ * 
+ *                      "updateClt"={
+ *                                  "method"="PUT",
+ *                                  "path"="/clients/{id}"
+ *                               },
+ * 
+ *                      "deleteClt"={
+ *                                  "method"="DELETE",
+ *                                  "path"="/clients/{id}"
+ *                               }
+ *                 }
+ * )
  */
 class Client
 {

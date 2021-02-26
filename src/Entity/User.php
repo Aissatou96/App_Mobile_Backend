@@ -8,10 +8,45 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ * 
+ *  attributes={},
+ * 
+ *  collectionOperations={
+ *                          "addUser"={
+ *                                      "method"="POST",
+ *                                      "path"="/user"
+ *                                    },
+ * 
+ *                          "getUsers"={
+ *                                      "method"="GET",
+ *                                      "path"="/users",
+ *                                      "normalization_context"= {"groups"= {"users_read"}}
+ *                                    }
+ *                       },
+ * 
+ *  itemOperations={
+ *                     "getUser"={
+ *                                  "method"="GET",
+ *                                  "path"="/users/{id}",
+ *                                  "normalization_context"= {"groups"= {"one_user_read"}}
+ *                               },
+ * 
+ *                      "updateUser"={
+ *                                  "method"="PUT",
+ *                                  "path"="/users/{id}"
+ *                               },
+ * 
+ *                      "deleteUser"={
+ *                                  "method"="DELETE",
+ *                                  "path"="/users/{id}"
+ *                               }
+ *                 }
+ * )
  */
 class User implements UserInterface
 {
@@ -19,11 +54,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"users_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"users_read"})
      */
     private $email;
 
@@ -38,11 +75,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read"})
      */
     private $lastname;
 
@@ -53,6 +92,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
+     * @Groups({"users_read"})
      */
     private $profil;
 
@@ -71,10 +111,7 @@ class User implements UserInterface
      */
     private $comptes;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Username;
+
 
     public function __construct()
     {
@@ -283,10 +320,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function setUsername(string $Username): self
-    {
-        $this->Username = $Username;
-
-        return $this;
-    }
+    
+   
 }

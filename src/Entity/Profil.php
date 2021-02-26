@@ -7,10 +7,46 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ * 
+ *   attributes={},
+ * 
+ *  collectionOperations={
+ *                          "addProfil"={
+ *                                      "method"="POST",
+ *                                      "path"="/profil"
+ *                                    },
+ * 
+ *                          "getProfils"={
+ *                                      "method"="GET",
+ *                                      "path"="/profils",
+ *                                      "normalization_context"= {"groups"= {"profils_read"}}
+ *                                    }
+ *                       },
+ * 
+ *  itemOperations={
+ *                     "getProfil"={
+ *                                  "method"="GET",
+ *                                  "path"="/profils/{id}",
+ *                                  "normalization_context"= {"groups"= {"one_profil_read"}}
+ *                               },
+ * 
+ *                      "updateProfil"={
+ *                                  "method"="PUT",
+ *                                  "path"="/profils/{id}"
+ *                               },
+ * 
+ *                      "deleteProfil"={
+ *                                  "method"="DELETE",
+ *                                  "path"="/profils/{id}"
+ *                               }
+ *                 }
+ * 
+ * )
  */
 class Profil
 {
@@ -18,11 +54,13 @@ class Profil
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"users_read", "profils_read", "one_profil_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read", "profils_read", "one_profil_read"})
      */
     private $libelle;
 

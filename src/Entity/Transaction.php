@@ -5,10 +5,46 @@ namespace App\Entity;
 use App\Repository\TransactionRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *  
+ *  attributes={},
+ * 
+ *  collectionOperations={
+ *                          "addTrans"={
+ *                                      "method"="POST",
+ *                                      "path"="/transac",
+ *                                      "denormalization_context"= {"groups"= {"transac_write"}}
+ *                                    },
+ * 
+ *                          "getAllTransac"={
+ *                                      "method"="GET",
+ *                                      "path"="/transac",
+ *                                      "normalization_context"= {"groups"= {"transac_read"}}
+ *                                    }
+ *                       },
+ * 
+ *  itemOperations={
+ *                     "getTransac"={
+ *                                  "method"="GET",
+ *                                  "path"="/transac/{id}",
+ *                                  "normalization_context"= {"groups"= {"one_transac_read"}}
+ *                               },
+ * 
+ *                      "updateTransac"={
+ *                                  "method"="PUT",
+ *                                  "path"="/transac/{id}"
+ *                               },
+ * 
+ *                      "deleteTransac"={
+ *                                  "method"="DELETE",
+ *                                  "path"="/transac/{id}"
+ *                               }
+ *                 }
+ * )
  */
 class Transaction
 {
