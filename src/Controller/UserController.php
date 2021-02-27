@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\ProfilRepository;
+use App\Repository\UserRepository;
+use App\Services\GestionImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,17 +36,50 @@ class UserController extends AbstractController
        // $data est un array je le dénormalize avec la fonction denormalize() pour avoir un objet de type       User::class
        $user = $serializer->denormalize($data, User::class);
 
+       //Recupération du profil qui sera affecté à l'utilisateur créé
        if($profil= $profilRepository->findOneBy(['libelle'=>$data['profils']])){
         $user->setProfil($profil);
         }
+
        //Recupérer le password pour encodage
        $password = $request->get('password');
        $user->setPassword($encoder->encodePassword($user,$password));
       
-        $em->persist($user);
-        $em->flush();
+      $em->persist($user);
+      $em->flush();
 
         return  $this->json(['message'=> 'Utilisateur créé avec succès!'], Response::HTTP_CREATED); 
      
+    }
+
+
+    /**
+     * @Route(
+     *        path="api/users/{id}", 
+     *        methods={"PUT"}
+     *       )
+     */
+    
+    public function updateUser(GestionImage $gestionImage, Request $request, $id, UserRepository $userRepository, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, ProfilRepository $profilRepository)
+    {
+      $userUpdate = $gestionImage->GestionImage($request,'avatar');
+      $utilisateur = $userRepository->find($id);
+      foreach ($userUpdate as $key => $value) {
+        $setteur = 'set'.ucfirst(strtolower($key));
+        if ($setteur=='setProfil') {
+          $utilisateur->setProfil($userUpdate['profils']);
+        }
+        if(method_exists(User::class,$setteur)){
+          if ($setteur=='setPassword') {
+             $utilisateur->setPassword($encoder->encodePassword($utilisateur,$userUpdate['password']));
+          }else{
+              $utilisateur->$setteur($value);
+          }
+        }
+      }
+        $em->persist($utilisateur);
+        $em->flush();
+        return  $this->json(['message'=> 'Utilisateur modifié avec succès!'], Response::HTTP_CREATED);
+
     }
 }
