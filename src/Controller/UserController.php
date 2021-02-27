@@ -28,6 +28,7 @@ class UserController extends AbstractController
          //Recupérer les données envoyées dans la requête avec $request
          $data = $request->request->all();
 
+         //Recupération et gestion de l'image
        if($getavatar = $request->files->get("avatar")){
         $avatar = fopen($getavatar->getRealPath(), 'rb');
         $data["avatar"] = $avatar;
@@ -59,8 +60,8 @@ class UserController extends AbstractController
      *        methods={"PUT"}
      *       )
      */
-    
-    public function updateUser(GestionImage $gestionImage, Request $request, $id, UserRepository $userRepository, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em, ProfilRepository $profilRepository)
+
+    public function updateUser(GestionImage $gestionImage, Request $request, $id, UserRepository $userRepository, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em)
     {
       $userUpdate = $gestionImage->GestionImage($request,'avatar');
       $utilisateur = $userRepository->find($id);
@@ -80,6 +81,6 @@ class UserController extends AbstractController
         $em->persist($utilisateur);
         $em->flush();
         return  $this->json(['message'=> 'Utilisateur modifié avec succès!'], Response::HTTP_CREATED);
-
     }
+
 }
