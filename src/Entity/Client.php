@@ -87,9 +87,10 @@ class Client
     private $archive = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="client")
+     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="clientEnvoi")
      */
     private $transactions;
+
 
     public function __construct()
     {
@@ -185,7 +186,7 @@ class Client
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions[] = $transaction;
-            $transaction->setClient($this);
+            $transaction->setClientEnvoi($this);
         }
 
         return $this;
@@ -195,11 +196,12 @@ class Client
     {
         if ($this->transactions->removeElement($transaction)) {
             // set the owning side to null (unless already changed)
-            if ($transaction->getClient() === $this) {
-                $transaction->setClient(null);
+            if ($transaction->getClientEnvoi() === $this) {
+                $transaction->setClientEnvoi(null);
             }
         }
 
         return $this;
     }
+
 }

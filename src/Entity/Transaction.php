@@ -81,19 +81,49 @@ class Transaction
     private $frais;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactions")
+     */
+    private $compte;
+
+    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactions")
      */
-    private $user;
+    private $userRetrait;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="transactions")
+     */
+    private $userDepot;
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactions")
      */
-    private $client;
+    private $clientEnvoi;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Compte::class, inversedBy="transactions")
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactions")
      */
-    private $compte;
+    private $clientRetrait;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $commissionEtat;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $CommissionTransfert;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $commissionDepot;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $commissionRetrait;
 
     public function getId(): ?int
     {
@@ -160,30 +190,6 @@ class Transaction
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
     public function getCompte(): ?Compte
     {
         return $this->compte;
@@ -192,6 +198,102 @@ class Transaction
     public function setCompte(?Compte $compte): self
     {
         $this->compte = $compte;
+
+        return $this;
+    }
+
+    public function getUserRetrait(): ?User
+    {
+        return $this->userRetrait;
+    }
+
+    public function setUserRetrait(?User $userRetrait): self
+    {
+        $this->userRetrait = $userRetrait;
+
+        return $this;
+    }
+
+    public function getUserDepot(): ?User
+    {
+        return $this->userDepot;
+    }
+
+    public function setUserDepot(?User $userDepot): self
+    {
+        $this->userDepot = $userDepot;
+
+        return $this;
+    }
+
+    public function getClientEnvoi(): ?Client
+    {
+        return $this->clientEnvoi;
+    }
+
+    public function setClientEnvoi(?Client $clientEnvoi): self
+    {
+        $this->clientEnvoi = $clientEnvoi;
+
+        return $this;
+    }
+
+    public function getClientRetrait(): ?Client
+    {
+        return $this->clientRetrait;
+    }
+
+    public function setClientRetrait(?Client $clientRetrait): self
+    {
+        $this->clientRetrait = $clientRetrait;
+
+        return $this;
+    }
+
+    public function getCommissionEtat(): ?float
+    {
+        return $this->commissionEtat;
+    }
+
+    public function setCommissionEtat(float $commissionEtat): self
+    {
+        $this->commissionEtat = $commissionEtat;
+
+        return $this;
+    }
+
+    public function getCommissionTransfert(): ?float
+    {
+        return $this->CommissionTransfert;
+    }
+
+    public function setCommissionTransfert(float $CommissionTransfert): self
+    {
+        $this->CommissionTransfert = $CommissionTransfert;
+
+        return $this;
+    }
+
+    public function getCommissionDepot(): ?float
+    {
+        return $this->commissionDepot;
+    }
+
+    public function setCommissionDepot(float $commissionDepot): self
+    {
+        $this->commissionDepot = $commissionDepot;
+
+        return $this;
+    }
+
+    public function getCommissionRetrait(): ?float
+    {
+        return $this->commissionRetrait;
+    }
+
+    public function setCommissionRetrait(float $commissionRetrait): self
+    {
+        $this->commissionRetrait = $commissionRetrait;
 
         return $this;
     }

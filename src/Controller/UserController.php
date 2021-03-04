@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\AgenceRepository;
 use App\Repository\ProfilRepository;
 use App\Repository\UserRepository;
 use App\Services\GestionImage;
@@ -23,7 +24,7 @@ class UserController extends AbstractController
      *       )
      */
 
-    public function addUser(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder,SerializerInterface $serializer, ProfilRepository $profilRepository): Response
+    public function addUser(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder,SerializerInterface $serializer, ProfilRepository $profilRepository, AgenceRepository $agenceRepository): Response
     {
          //Recupérer les données envoyées dans la requête avec $request
          $data = $request->request->all();
@@ -33,7 +34,7 @@ class UserController extends AbstractController
         $avatar = fopen($getavatar->getRealPath(), 'rb');
         $data["avatar"] = $avatar;
       }
-   
+      
        // $data est un array je le dénormalize avec la fonction denormalize() pour avoir un objet de type       User::class
        $user = $serializer->denormalize($data, User::class);
 
@@ -41,7 +42,11 @@ class UserController extends AbstractController
        if($profil= $profilRepository->findOneBy(['libelle'=>$data['profils']])){
         $user->setProfil($profil);
         }
-
+        // on verifie si agence a ete envoye dans la request
+      if(isset($data['agences'])){
+        $agence = $agenceRepository->findOneBy(['id'=>(int)$data['agences']]);
+        $user->setAgence($agence);
+      }
        //Recupérer le password pour encodage
        $password = $request->get('password');
        $user->setPassword($encoder->encodePassword($user,$password));

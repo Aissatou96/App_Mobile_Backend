@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                          "addCompte"={
  *                                      "method"="POST",
  *                                      "path"="/compte",
- *                                      "denormalization_context"= {"groups"= {"compte_write"}}
+ *                                      "route_name":"addingCompte"
  *                                    },
  * 
  *                          "getComptes"={
@@ -54,39 +54,40 @@ class Compte
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"comptes_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"comptes_read"})
      */
     private $numCpte;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"comptes_read"})
      */
     private $solde;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"comptes_read"})
      */
     private $statut = 'Actif';
 
     /**
      * @ORM\Column(type="datetime")
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @Groups({"comptes_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"comptes_read"})
      */
     private $archive = 0;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comptes")
-     */
-    private $user;
 
     /**
      * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="compte")
@@ -98,9 +99,16 @@ class Compte
      */
     private $agence;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Depot::class, mappedBy="compte")
+     */
+    private $depots;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->depots = new ArrayCollection();
+        $this->createdAt= new \DateTime('now');
     }
 
     public function getId(): ?int
@@ -164,21 +172,9 @@ class Compte
     public function setArchive(bool $archive): self
     {
         $this->archive = $archive;
-
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Transaction[]
@@ -218,6 +214,36 @@ class Compte
     public function setAgence(?Agence $agence): self
     {
         $this->agence = $agence;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Depot[]
+     */
+    public function getDepots(): Collection
+    {
+        return $this->depots;
+    }
+
+    public function addDepot(Depot $depot): self
+    {
+        if (!$this->depots->contains($depot)) {
+            $this->depots[] = $depot;
+            $depot->setCompte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepot(Depot $depot): self
+    {
+        if ($this->depots->removeElement($depot)) {
+            // set the owning side to null (unless already changed)
+            if ($depot->getCompte() === $this) {
+                $depot->setCompte(null);
+            }
+        }
 
         return $this;
     }
