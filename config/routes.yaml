@@ -13,3 +13,6 @@ addingDepot:
 annulerDepot:
   path: /api/depots/{id}
   controller: App\Controller\DepotController::deleteDepot
+creerTransaction:
+  path: /api/transac
+  controller: App\Controller\TransactionController::creerTransaction

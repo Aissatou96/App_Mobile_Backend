@@ -58,21 +58,25 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transac_write"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transac_write"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transac_write"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transac_write"})
      */
     private $cni;
 

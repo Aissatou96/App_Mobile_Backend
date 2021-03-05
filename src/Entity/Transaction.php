@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                          "addTrans"={
  *                                      "method"="POST",
  *                                      "path"="/transac",
+ *                                      "route_name":"creerTransaction",
  *                                      "denormalization_context"= {"groups"= {"transac_write"}}
  *                                    },
  * 
@@ -57,6 +58,7 @@ class Transaction
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"transac_write"})
      */
     private $montant;
 
@@ -97,11 +99,13 @@ class Transaction
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactions")
+     * @Groups({"transac_write"})
      */
     private $clientEnvoi;
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="transactions")
+     * @Groups({"transac_write"})
      */
     private $clientRetrait;
 
